@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Análisis Numérico Fotovoltaico</title>
+
+    <link rel="stylesheet" href="estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Análisis Numérico del Consumo de Potencia</h1>
+        <h2>Sistema Fotovoltaico</h2>
+
+        <p>
+            Aplicación web para analizar datos experimentales mediante
+            interpolación, derivación e integración numérica.
+        </p>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Datos experimentales</h2>
+            <div class="carga-datos">
+    <label for="archivo-csv">
+        Importar archivo CSV:
+    </label>
+
+    <input
+        type="file"
+        id="archivo-csv"
+        accept=".csv"
+    >
+
+    <button onclick="cargarArchivoCSV()">
+        Cargar datos
+    </button>
+
+    <button onclick="restaurarDatosOriginales()">
+        Restaurar mediciones
+    </button>
+
+    <p id="mensaje-csv">
+        El archivo debe contener las columnas:
+        hora, voltajePanel y voltajeShunt.
+    </p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Voltaje del panel (V)</th>
+                        <th>Voltaje del shunt (V)</th>
+                        <th>Corriente (A)</th>
+                        <th>Potencia (W)</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla-datos"></tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Métodos numéricos</h2>
+
+            <div class="botones-metodos">
+                <button onclick="mostrarModuloInterpolacion()">
+                   Interpolación
+                </button>
+                <button onclick="calcularInterpolacion()">
+                    Calcular potencia estimada
+                </button>
+
+                <button onclick="mostrarModuloRaices()">
+                    Raíces de ecuaciones
+                </button>
+                <button onclick="mostrarModuloDerivacion()">
+                    Derivación numérica
+                </button>
+                <button onclick="mostrarModuloIntegracion()">
+                    Integración numérica
+                </button>
+            </div>
+        </section>
+        <section id="modulo-interpolacion" class="modulo-metodo oculto">
+
+    <h2>Interpolación numérica</h2>
+
+    <label for="hora-interpolacion">
+        Hora que desea estimar:
+    </label>
+
+    <input
+        type="time"
+        id="hora-interpolacion"
+        step="1"
+        value="12:21:30"
+    >
+
+    <label for="metodo-interpolacion">
+        Método de interpolación:
+    </label>
+
+    <select id="metodo-interpolacion">
+        <option value="lineal">Interpolación lineal</option>
+        <option value="lagrange">Interpolación de Lagrange</option>
+    </select>
+
+    <button onclick="calcularInterpolacion()">
+        Calcular potencia estimada
+    </button>
+
+    <div id="resultado-interpolacion" class="caja-resultado">
+        Aquí aparecerá el resultado.
+    </div>
+
+        </section>
+        <section id="modulo-raices" class="modulo-metodo oculto">
+
+    <h2>Raíces de ecuaciones</h2>
+
+    <p>
+        Determine el instante en que la potencia del panel alcanza
+        un valor específico.
+    </p>
+
+    <label for="potencia-objetivo">
+        Potencia objetivo (W):
+    </label>
+
+    <input
+        type="number"
+        id="potencia-objetivo"
+        value="4"
+        min="0"
+        step="0.01"
+    >
+
+    <label for="intervalo-raiz">
+        Intervalo de búsqueda:
+    </label>
+
+    <select id="intervalo-raiz">
+        <!-- JavaScript agregará los intervalos -->
+    </select>
+
+    <label for="metodo-raiz">
+        Método:
+    </label>
+
+    <select id="metodo-raiz">
+        <option value="biseccion">Método de Bisección</option>
+        <option value="newton">Método de Newton-Raphson</option>
+    </select>
+
+    <button onclick="calcularRaiz()">
+        Calcular instante
+    </button>
+
+    <div id="resultado-raiz" class="caja-resultado">
+        Aquí aparecerá el resultado.
+    </div>
+
+        </section>
+        <section id="modulo-derivacion" class="modulo-metodo oculto">
+
+    <h2>Derivación numérica</h2>
+
+    <p>
+        Calcule la tasa de variación de la potencia respecto al tiempo.
+    </p>
+
+    <label for="punto-derivacion">
+        Hora de evaluación:
+    </label>
+
+    <select id="punto-derivacion">
+        <!-- JavaScript agregará las horas -->
+    </select>
+
+    <label for="metodo-derivacion">
+        Método:
+    </label>
+
+    <select id="metodo-derivacion">
+        <option value="progresiva">
+            Diferencia progresiva
+        </option>
+
+        <option value="regresiva">
+            Diferencia regresiva
+        </option>
+
+        <option value="centrada" selected>
+            Diferencia centrada
+        </option>
+    </select>
+
+    <button onclick="calcularDerivacion()">
+        Calcular derivada
+    </button>
+
+    <div id="resultado-derivacion" class="caja-resultado">
+        Aquí aparecerá el resultado.
+    </div>
+
+       </section>
+       <section id="modulo-integracion" class="modulo-metodo oculto">
+
+    <h2>Integración numérica</h2>
+
+    <p>
+        Calcule la energía eléctrica generada durante un intervalo
+        de medición.
+    </p>
+
+    <label for="inicio-integracion">
+        Hora inicial:
+    </label>
+
+    <select id="inicio-integracion">
+        <!-- JavaScript agregará las horas -->
+    </select>
+
+    <label for="fin-integracion">
+        Hora final:
+    </label>
+
+    <select id="fin-integracion">
+        <!-- JavaScript agregará las horas -->
+    </select>
+
+    <label for="metodo-integracion">
+        Método:
+    </label>
+
+    <select id="metodo-integracion">
+        <option value="trapecio">
+            Regla compuesta del Trapecio
+        </option>
+
+        <option value="simpson">
+            Regla compuesta de Simpson
+        </option>
+    </select>
+
+    <button onclick="calcularIntegracion()">
+        Calcular energía
+    </button>
+
+    <div id="resultado-integracion" class="caja-resultado">
+        Aquí aparecerá el resultado.
+    </div>
+
+        </section>
+           
+        <section>
+          <h2>Gráfica de potencia respecto al tiempo</h2>
+
+          <div class="contenedor-grafica">
+             <canvas id="grafica-potencia"></canvas>
+         </div>
+        </section>
+
+        <section>
+            <h2>Gráfica de potencia</h2>
+
+            <div id="grafica">
+                Aquí se mostrará la gráfica de potencia respecto al tiempo.
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            Proyecto del curso de Métodos Numéricos – Ingeniería Eléctrica
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f3f5f7;
+    color: #1f2933;
+}
+
+header {
+    background-color: #123b5d;
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+}
+
+header h1 {
+    margin-bottom: 5px;
+}
+
+header h2 {
+    margin-top: 0;
+    font-weight: normal;
+}
+
+main {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+section {
+    background-color: white;
+    margin-bottom: 25px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    border: 1px solid #cbd5e1;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #dbeafe;
+}
+
+.botones-metodos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1769aa;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: #0f4c81;
+}
+
+#resultado,
+#grafica {
+    min-height: 100px;
+    padding: 20px;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    background-color: #f8fafc;
+}
+
+footer {
+    background-color: #123b5d;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+.contenedor-grafica {
+    width: 100%;
+    min-height: 400px;
+    position: relative;
+}
+.oculto {
+    display: none;
+}
+
+.modulo-metodo {
+    margin-top: 25px;
+}
+
+.modulo-metodo label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.modulo-metodo input,
+.modulo-metodo select {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.caja-resultado {
+    margin-top: 20px;
+    padding: 18px;
+    background-color: #f8fafc;
+    border-left: 5px solid #1769aa;
+    border-radius: 6px;
+}
+.modulo-metodo button {
+    margin-top: 10px;
+}
+.carga-datos {
+    margin-bottom: 20px;
+    padding: 18px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.carga-datos label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.carga-datos input {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#mensaje-csv {
+    margin-bottom: 0;
+    color: #475569;
+}
