@@ -262,12 +262,43 @@
         </section>
            
         <section>
-          <h2>Gráfica de potencia respecto al tiempo</h2>
+            
+        <section>
+    <h2>Visualización gráfica de resultados</h2>
 
-          <div class="contenedor-grafica">
-             <canvas id="grafica-potencia"></canvas>
-         </div>
-        </section>
+    <div class="controles-grafica">
+        <label for="tipo-grafica">
+            Seleccione la variable que desea visualizar:
+        </label>
+
+        <select id="tipo-grafica">
+            <option value="potencia">
+                Potencia experimental
+            </option>
+
+            <option value="derivada">
+                Derivación numérica
+            </option>
+
+            <option value="energia">
+                Energía acumulada
+            </option>
+        </select>
+
+        <button onclick="actualizarGraficaInteractiva()">
+            Actualizar gráfica
+        </button>
+    </div>
+
+    <div class="contenedor-grafica">
+        <canvas id="grafica-potencia"></canvas>
+    </div>
+
+    <div id="descripcion-grafica" class="caja-resultado">
+        La gráfica muestra la potencia experimental respecto al tiempo.
+    </div>
+
+</section>
 
         <section>
             <h2>Gráfica de potencia</h2>
