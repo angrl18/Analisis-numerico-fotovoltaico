@@ -154,3 +154,26 @@ footer {
     margin-bottom: 0;
     color: #475569;
 }
+.controles-grafica {
+    margin-bottom: 20px;
+    padding: 18px;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.controles-grafica label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.controles-grafica select {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}

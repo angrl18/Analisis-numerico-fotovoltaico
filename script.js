@@ -1365,3 +1365,185 @@ function limpiarResultados() {
         }
     });
 }
+// Calcula la derivada centrada para los puntos interiores
+function obtenerDatosDerivada() {
+    const horas = [];
+    const derivadas = [];
+
+    for (let i = 1; i < datosExperimentales.length - 1; i++) {
+        const tAnterior = convertirHoraAMinutos(
+            datosExperimentales[i - 1].hora
+        );
+
+        const tSiguiente = convertirHoraAMinutos(
+            datosExperimentales[i + 1].hora
+        );
+
+        const pAnterior =
+            datosExperimentales[i - 1].potencia;
+
+        const pSiguiente =
+            datosExperimentales[i + 1].potencia;
+
+        const derivada =
+            (pSiguiente - pAnterior) /
+            (tSiguiente - tAnterior);
+
+        horas.push(datosExperimentales[i].hora);
+        derivadas.push(derivada);
+    }
+
+    return {
+        horas,
+        derivadas
+    };
+}
+
+
+// Calcula la energía acumulada mediante trapecios
+function obtenerEnergiaAcumulada() {
+    const horas = [datosExperimentales[0].hora];
+    const energias = [0];
+
+    let energiaAcumuladaWMin = 0;
+
+    for (let i = 0; i < datosExperimentales.length - 1; i++) {
+        const t1 = convertirHoraAMinutos(
+            datosExperimentales[i].hora
+        );
+
+        const t2 = convertirHoraAMinutos(
+            datosExperimentales[i + 1].hora
+        );
+
+        const h = t2 - t1;
+
+        const areaTrapecio =
+            (h / 2) *
+            (
+                datosExperimentales[i].potencia +
+                datosExperimentales[i + 1].potencia
+            );
+
+        energiaAcumuladaWMin += areaTrapecio;
+
+        horas.push(datosExperimentales[i + 1].hora);
+
+        // Conversión de W·min a Wh
+        energias.push(energiaAcumuladaWMin / 60);
+    }
+
+    return {
+        horas,
+        energias
+    };
+}
+
+
+// Cambia el contenido de la gráfica
+function actualizarGraficaInteractiva() {
+    const tipoGrafica =
+        document.getElementById("tipo-grafica").value;
+
+    const descripcion =
+        document.getElementById("descripcion-grafica");
+
+    if (!graficaPotencia) {
+        return;
+    }
+
+    if (tipoGrafica === "potencia") {
+        graficaPotencia.data.labels =
+            datosExperimentales.map((dato) => dato.hora);
+
+        graficaPotencia.data.datasets = [
+            {
+                label: "Potencia del panel (W)",
+                data: datosExperimentales.map(
+                    (dato) => dato.potencia
+                ),
+                borderWidth: 2,
+                tension: 0.2,
+                pointRadius: 4
+            }
+        ];
+
+        graficaPotencia.options.plugins.title.text =
+            "Potencia generada por el sistema fotovoltaico";
+
+        graficaPotencia.options.scales.y.title.text =
+            "Potencia (W)";
+
+        descripcion.innerHTML = `
+            <strong>Potencia experimental:</strong>
+            representa la potencia calculada mediante
+            P = V × I para cada instante de medición.
+        `;
+    }
+
+
+    if (tipoGrafica === "derivada") {
+        const datosDerivada =
+            obtenerDatosDerivada();
+
+        graficaPotencia.data.labels =
+            datosDerivada.horas;
+
+        graficaPotencia.data.datasets = [
+            {
+                label: "Tasa de cambio de potencia (W/min)",
+                data: datosDerivada.derivadas,
+                borderWidth: 2,
+                tension: 0.2,
+                pointRadius: 4
+            }
+        ];
+
+        graficaPotencia.options.plugins.title.text =
+            "Derivación numérica de la potencia";
+
+        graficaPotencia.options.scales.y.title.text =
+            "dP/dt (W/min)";
+
+        descripcion.innerHTML = `
+            <strong>Derivación numérica:</strong>
+            los valores positivos indican aumento de potencia,
+            mientras que los valores negativos indican disminución.
+            Se utilizó diferencia centrada en los puntos interiores.
+        `;
+    }
+
+
+    if (tipoGrafica === "energia") {
+        const datosEnergia =
+            obtenerEnergiaAcumulada();
+
+        graficaPotencia.data.labels =
+            datosEnergia.horas;
+
+        graficaPotencia.data.datasets = [
+            {
+                label: "Energía acumulada (Wh)",
+                data: datosEnergia.energias,
+                borderWidth: 2,
+                tension: 0.2,
+                pointRadius: 4,
+                fill: true
+            }
+        ];
+
+        graficaPotencia.options.plugins.title.text =
+            "Energía acumulada generada";
+
+        graficaPotencia.options.scales.y.title.text =
+            "Energía acumulada (Wh)";
+
+        descripcion.innerHTML = `
+            <strong>Energía acumulada:</strong>
+            representa la integral de la potencia respecto al tiempo,
+            calculada progresivamente mediante la regla del trapecio.
+        `;
+    }
+
+    graficaPotencia.update();
+}
